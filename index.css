@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: black;
+}
+
+#start-game {
+    width: 100vw;
+    height: 100vw;
+    background-color: #15151D;
+    text-align: center;
+    opacity: 1;
+    
+}
+
+#game {
+    width: 900px;
+    height: 500px;
+    background-color: #272829;
+    position: absolute;
+    left: 50%;
+    top:  50%;
+    margin-left: -450px;
+    margin-top: -250px;
+    z-index: -1;
+}
+
+#start-game h1 {
+    font-size: 50px;
+    font-family: 'Bungee Spice', cursive;
+    font-weight: bold;
+    padding-top: 40vh;
+}
+
+#start-game h3 {
+    color: white;
+    font-family: 'Josefin Slab', serif;
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 2s;
+    
+}
+
+
+@keyframes slideleft {
+
+    0% {
+        transform: translateX(0px)
+    }
+
+    100% {
+        transform: translateX(-150vw);
+    }
+    
+}
+
