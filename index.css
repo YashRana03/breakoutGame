@@ -24,6 +24,14 @@ body {
     margin-left: -450px;
     margin-top: -250px;
     z-index: -1;
+    padding-top: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: start;
+    
+    
+    
 }
 
 #start-game h1 {
@@ -35,10 +43,19 @@ body {
 
 #start-game h3 {
     color: white;
+    font-size: 30px;
     font-family: 'Josefin Slab', serif;
     opacity: 1;
     transition-property: opacity;
     transition-duration: 2s;
+    
+}
+
+.block {
+    background-color: pink;
+    width: 150px;
+    height: 30px;
+    margin: 5px
     
 }
 
