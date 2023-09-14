@@ -118,10 +118,14 @@ function moveBall() {
 
     for(let i = 0; i<allBlocks.length; i++) {
         //console.log(1)
-        if((ballPosition[0] >= allBlocks[i].bottomLeft[0]  && ballPosition[0] <= allBlocks[i].bottomRight[0]) && (ballPosition[1] >= allBlocks[i].bottomLeft && ballPosition[1] <= allBlocks[i].topLeft )) {
-            remove(allBlocks[i])
+        if((ballPosition[0] >= (allBlocks[i].bottomLeft[0] - 5)  && ballPosition[0] <= (allBlocks[i].bottomRight[0] + 5)) && (ballPosition[1] >= (allBlocks[i].bottomLeft[1] + 5) && ballPosition[1] <= (allBlocks[i].topLeft[1] - 5) ) ) {
+            console.log("touched")
+            let blocks = document.querySelectorAll("#game .block")
+            blocks[i].remove()
             allBlocks.splice(i, 1)
+            console.log()
             adderY = -adderY
+            
         }
     }
 
