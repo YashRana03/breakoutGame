@@ -25,13 +25,12 @@ body {
     margin-top: -250px;
     z-index: -1;
     padding-top: 25px;
+    /*
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: start;
-    
-    
-    
+    */    
 }
 
 #start-game h1 {
@@ -55,8 +54,24 @@ body {
     background-color: pink;
     width: 150px;
     height: 30px;
-    margin: 5px
+    position: absolute;
     
+}
+
+.paddle {
+    background-color: whitesmoke;
+    width: 150px;
+    height: 30px;
+    position: absolute;
+
+}
+
+.ball {
+    background-color: red;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
 }
 
 
