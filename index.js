@@ -1,6 +1,9 @@
 const startGameH3El = document.querySelector("#start-game h3")
 const startGameEl = document.getElementById("start-game")
 const gameEl = document.getElementById("game")
+const livesEl = document.querySelector("#lives span")
+console.log(livesEl)
+const heart = "❤"
 const colours = ["pink", "blue", "green", "orange"]
 let value = 0.1
 const blockWidth = 150
@@ -9,6 +12,8 @@ let paddleWidth = 150
 //let count = -1
 let adderX = 2
 let adderY = 2
+let timerId = null
+let lives = 3
 
 
 startGameEl.addEventListener("click", () => {
@@ -41,8 +46,8 @@ class Block {
 }
 
 const paddlePosition = [375, 450]
-const ballPosition = [250, 250]
-const allBlocks = [
+let ballPosition = [250, 250]
+let allBlocks = [
     new Block(55, 30),
     new Block(215, 30), 
     new Block(375, 30),
@@ -60,8 +65,11 @@ const allBlocks = [
     new Block(695, 110),
 ]
 
+const allBlocksCopy = [...allBlocks]
 
- let block = null
+
+
+let block = null
 for(let i = 0; i<allBlocks.length; i++) {
     block = document.createElement("div")
     block.classList.add("block")
@@ -95,7 +103,7 @@ function movePaddle(e) {
 
 document.addEventListener("keydown", movePaddle)
 
-const ball = document.createElement("div")
+let ball = document.createElement("div")
 ball.classList.add("ball")
 setPosition(ball, ballPosition)
 gameEl.appendChild(ball)
@@ -110,14 +118,14 @@ function moveBall() {
 }
 
 function checkCollision() {
-
+    
     if(ballPosition[0] >= 890 | ballPosition[0] <= 10) {
         adderX = -adderX
     }
 
-    if(ballPosition[1] >= 495 | ballPosition[1] <= 5 ) {
+    if(ballPosition[1] <= 5 ) {
         adderY = -adderY
-        
+    
     }
 
     if( (ballPosition[1] > 424 && ballPosition[1] <= 428) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
@@ -137,6 +145,33 @@ function checkCollision() {
         }
         
     }
+
+    if(ballPosition[1] >= 495 ) {
+        
+        console.log("You lost")
+        ball.style.opacity = 0
+        clearInterval(timerId)
+        lives--
+        if(lives == 0) {
+            console.log("Game finished")
+        }
+        else {
+            setTimeout(()=> {
+            
+            
+                console.log(lives)
+                console.log(livesEl)
+                ballPosition = [250, 250]
+                setPosition(ball, ballPosition)
+                adderX = 2
+                adderY = 2
+                ball.style.opacity = 1
+                startGame()
+            }, 1000)
+        }
+        
+    }
+    
     
     let blocksEl = document.querySelectorAll("#game .block")
     for(let i = 0; i<allBlocks.length; i++) {
@@ -157,8 +192,17 @@ function setPosition(element, position) {
 }
 
 
+function setLives() {
+    livesEl.textContent = ""
+    for(let i = 0; i<lives; i++) {
+        livesEl.textContent += ` ${heart}`
+    }   
+
+}
+
 function startGame() {
-    setInterval(moveBall, 10)
+    setLives()
+    timerId = setInterval(moveBall, 10)
 }
 
 

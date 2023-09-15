@@ -25,12 +25,7 @@ body {
     z-index: -1;
     padding-top: 25px;
     background-color: black;
-    /*
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: start;
-    */    
+      
 }
 
 #start-game h1 {
@@ -48,6 +43,16 @@ body {
     transition-property: opacity;
     transition-duration: 2s;
     
+}
+
+#lives {
+    color: white;
+    position: absolute;
+    top: -50px;
+}
+
+#lives span {
+    color: red;
 }
 
 .block {
