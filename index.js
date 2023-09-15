@@ -5,6 +5,7 @@ const colours = ["pink", "blue", "green", "orange"]
 let value = 0.1
 const blockWidth = 150
 const blockHeight = 30
+let paddleWidth = 150
 //let count = -1
 let adderX = 2
 let adderY = 2
@@ -13,8 +14,9 @@ let adderY = 2
 startGameEl.addEventListener("click", () => {
     startGameEl.style.animation = "slideleft 1s ease-in"
     setTimeout(() => {
+        startGame()
         startGameEl.remove()
-    }, 800)
+    }, 900)
     
 })
 
@@ -58,7 +60,7 @@ const allBlocks = [
     new Block(695, 110),
 ]
 
-//let a = new Block(20, 30)
+
  let block = null
 for(let i = 0; i<allBlocks.length; i++) {
     block = document.createElement("div")
@@ -71,8 +73,7 @@ for(let i = 0; i<allBlocks.length; i++) {
 
 const paddle = document.createElement("div")
 paddle.classList.add("paddle")
-paddle.style.left = paddlePosition[0] + "px"
-paddle.style.top = paddlePosition[1] + "px"
+setPosition(paddle, paddlePosition)
 gameEl.appendChild(paddle)
 
 
@@ -96,13 +97,20 @@ document.addEventListener("keydown", movePaddle)
 
 const ball = document.createElement("div")
 ball.classList.add("ball")
-ball.style.left = ballPosition[0] + "px"
-ball.style.top = ballPosition[1] + "px"
+setPosition(ball, ballPosition)
 gameEl.appendChild(ball)
 
-
-
 function moveBall() {
+    checkCollision()
+
+    ballPosition[0] += adderX
+    ballPosition[1] += adderY
+    setPosition(ball, ballPosition)
+
+}
+
+function checkCollision() {
+
     if(ballPosition[0] >= 890 | ballPosition[0] <= 10) {
         adderX = -adderX
     }
@@ -112,49 +120,47 @@ function moveBall() {
         
     }
 
-    if( (ballPosition[1] > 424 && ballPosition[1] <= 428) && (ballPosition[0] >= paddlePosition[0] -15 && ballPosition[0] <= paddlePosition[0] + 165)) {
-        adderY = -adderY  
-    }
+    if( (ballPosition[1] > 424 && ballPosition[1] <= 428) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
 
-    for(let i = 0; i<allBlocks.length; i++) {
-        //console.log(1)
-        if((ballPosition[0] >= (allBlocks[i].bottomLeft[0] - 5)  && ballPosition[0] <= (allBlocks[i].bottomRight[0] + 5)) && (ballPosition[1] >= (allBlocks[i].bottomLeft[1] + 5) && ballPosition[1] <= (allBlocks[i].topLeft[1] - 5) ) ) {
-            console.log("touched")
-            let blocks = document.querySelectorAll("#game .block")
-            blocks[i].remove()
-            allBlocks.splice(i, 1)
-            console.log()
+        if(ballPosition[0] < paddlePosition[0] + 50) {
+            adderX = -2
             adderY = -adderY
-            
+            }
+
+        else if(ballPosition[0]> paddlePosition[0] + 50 && ballPosition[0] < paddlePosition[0] + 100) {
+            adderX = 0
+            adderY = -adderY
+        }
+        else {
+            adderX = 2
+            adderY = -adderY
+        }
+        
+    }
+    
+    let blocksEl = document.querySelectorAll("#game .block")
+    for(let i = 0; i<allBlocks.length; i++) {
+
+        if((ballPosition[0] >= (allBlocks[i].bottomLeft[0] - 20)  && ballPosition[0] <= (allBlocks[i].bottomRight[0] + 20)) && (ballPosition[1] <= (allBlocks[i].bottomLeft[1] + 30) && ballPosition[1] >= (allBlocks[i].topLeft[1] -50) ) ) {
+
+            blocksEl[i].remove()
+            allBlocks.splice(i, 1) 
+            adderY = -adderY
+
         }
     }
+}
 
-    ballPosition[0] += adderX
-    ballPosition[1] += adderY
-    ball.style.left = ballPosition[0] + "px"
-    ball.style.top = ballPosition[1] + "px"
-
+function setPosition(element, position) {
+    element.style.left = position[0] + "px"
+    element.style.top = position[1] + "px"
 }
 
 
-setInterval(moveBall, 10)
+function startGame() {
+    setInterval(moveBall, 10)
+}
 
-// function renderBlocks() {
-    
-//     let something = null
-    
-//     for(let i = 0; i<20; i++) {
-//         if(i % 5 == 0) {
-//             count++
-//         }
-//         something = document.createElement("div")
-//         something.style.backgroundColor = colours[count]
-//         something.classList.add("block")
-//         gameEl.appendChild(something)
-        
-//     }
-    
-// }
 
-// renderBlocks()
+
 
