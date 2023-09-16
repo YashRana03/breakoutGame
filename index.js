@@ -15,7 +15,8 @@ const blockHeight = 30
 let paddleWidth = 150
 let adderX = 4
 let adderY = 4
-let timerId = null
+let gameTimerId = null
+let buttonTimerId = null
 let lives = 3
 let score = 0
 let scale = 1.1
@@ -51,7 +52,7 @@ class Block {
     }
 }
 
-const paddlePosition = [375, 450]
+const paddlePosition = [375, 650]
 let ballPosition = [250, 200]
 let allBlocks = [
     new Block(55, 30),
@@ -137,7 +138,7 @@ function checkCollision() {
     
     }
 
-    if( (ballPosition[1] > 424 && ballPosition[1] <= 428) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
+    if( (ballPosition[1] > paddlePosition[1] - 26 && ballPosition[1] <= paddlePosition[1] - 10) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
 
         if(ballPosition[0] < paddlePosition[0] + 50) {
             adderX = -4
@@ -155,11 +156,11 @@ function checkCollision() {
         
     }
 
-    if(ballPosition[1] >= 495 ) {
+    if(ballPosition[1] >= 695 ) {
         
         
         ball.style.opacity = 0
-        clearInterval(timerId)
+        clearInterval(gameTimerId)
         lives--
         if(lives == 0) {
             let els = document.querySelectorAll("#game .block")
@@ -250,13 +251,14 @@ function createDialogueBox() {
         ballPosition = [250, 150]
         ball.style.opacity = 1
         scoreEl.style.opacity = 1
+        clearTimeout(buttonTimerId)
         startGame()
         dialogueEl.remove()
     })
     
     dialogueEl.appendChild(buttonEl)
 
-    setInterval(() => {
+    buttonTimerId = setInterval(() => {
         buttonEl.style.scale = scale
         if(scale == 1.1) {
             scale = 1
@@ -272,11 +274,13 @@ function createDialogueBox() {
 
 
 }
+
+
 function startGame() {
     // displayBlock()
     
     setLives()
-    timerId = setInterval(moveBall, 10)
+    gameTimerId = setInterval(moveBall, 10)
 }
 
 
