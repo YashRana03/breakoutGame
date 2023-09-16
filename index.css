@@ -7,7 +7,7 @@ body {
 
 #start-game {
     width: 100vw;
-    height: 100vw;
+    height: 100%;
     background-color: #15151D;
     text-align: center;
     opacity: 1;
@@ -45,10 +45,16 @@ body {
     
 }
 
-#lives {
+#lives, #score {
+    font-family: 'Josefin Slab', serif;
     color: white;
     position: absolute;
     top: -50px;
+    left: 50px;
+}
+
+#score {
+    left: 150px;
 }
 
 #lives span {
@@ -78,7 +84,56 @@ body {
     width: 20px;
     height: 20px;
     border-radius: 50%;
+    
 }
+
+.dialogue {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -150px;
+    margin-top: -150px;
+    background-color: #171652;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    
+}
+
+.game-over {
+    font-size: 30px;
+    font-family: 'Bungee Spice', cursive;
+    font-weight: bold;
+}
+
+.score {
+    font-family: 'Josefin Slab', serif;
+    color: white;
+}
+
+.replay-btn {
+    margin-top: 50px;
+    font-family: 'Josefin Slab', serif;
+    font-weight: bold;
+    font-size: 17px;
+    width: 120px;
+    height: 40px;
+    border: none;
+    color: whitesmoke;
+    background-color: #DE3456;
+    border-radius: 8px;
+    scale: 1;
+    transition-property: scale;
+    transition-duration: 1s;
+}
+
+
+
 
 
 @keyframes slideleft {
