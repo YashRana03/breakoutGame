@@ -3,15 +3,15 @@ const startGameEl = document.getElementById("start-game")
 const gameEl = document.getElementById("game")
 const livesEl = document.querySelector("#lives span")
 const scoreEl = document.getElementById("score")
-let messageEl = null
 const containerEl = document.getElementById("container")
+let messageEl = null
 
 
-const heart = "❤"
-const colours = ["pink", "blue", "green", "orange"]
-let value = 0.1
 const blockWidth = 150
 const blockHeight = 30
+const heart = "❤"
+const colours = ["pink", "blue", "green", "red"]
+let value = 0.1
 let paddleWidth = 150
 let adderX = 3
 let adderY = 3
@@ -21,7 +21,7 @@ let buttonTimerId = null
 let lives = 3
 let score = 0
 let scale = 1.1
-let level  = 1
+let level  = 3
 
 
 startGameEl.addEventListener("click", () => {
@@ -80,13 +80,19 @@ const allBlocksCopy = [...allBlocks]
 
 function displayBlocks() {
     let block = null
-    
+    let index = 0
+    let count = 0
     for(let i = 0; i<allBlocks.length; i++) {
+        if(count % 5 == 0) {
+            index++
+        }
         block = document.createElement("div")
         block.classList.add("block")
+        block.classList.add(colours[index])
         block.style.left = allBlocks[i].bottomLeft[0]  + "px"
         block.style.top = allBlocks[i].bottomLeft[1] + "px"
         gameEl.appendChild(block)
+        count++
     }
 }
 
@@ -146,15 +152,26 @@ function checkCollision() {
 
     if( (ballPosition[1] > paddlePosition[1] - 26 && ballPosition[1] <= paddlePosition[1] - 10) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
 
-        if(ballPosition[0] < paddlePosition[0] + paddleWidth/3) {
+        if(ballPosition[0] < paddlePosition[0] + paddleWidth/5) {
             adderX = -originalAdder
             adderY = -adderY
-            }
+        }
 
-        else if(ballPosition[0]> paddlePosition[0] + paddleWidth/3 && ballPosition[0] < paddlePosition[0] + paddleWidth*(2/3)) {
+        else if(ballPosition[0] > paddlePosition[0] + paddleWidth/5 && ballPosition[0] < paddlePosition[0] + paddleWidth*(2/5)) {
+            adderX = -originalAdder + 1
+            adderY = -adderY
+        }
+
+        else if(ballPosition[0]> paddlePosition[0] + paddleWidth*(2/5) && ballPosition[0] < paddlePosition[0] + paddleWidth*(3/5)) {
             adderX = 0
             adderY = -adderY
         }
+
+        else if(ballPosition[0]> paddlePosition[0] + paddleWidth*(3/5) && ballPosition[0] < paddlePosition[0] + paddleWidth*(4/5)) {
+            adderX = originalAdder - 1
+            adderY = -adderY
+        }
+        
         else {
             adderX = originalAdder
             adderY = -adderY
@@ -227,47 +244,51 @@ function checkGameEnd() {
 }
 
 function createMessage(lv) {
-    if(lv <4) {
+    if(lv == 2 | lv == 3) {
         messageEl =  document.createElement("h3")
         messageEl.textContent = `Level ${lv}`
         messageEl.id = "message"
         containerEl.appendChild(messageEl)
-    }
-    
-    setTimeout(() => {
-        if(lv < 4) {
+
+        setTimeout(() => {
+            
             messageEl.remove()
             messageEl = document.createElement("h3")
             messageEl.textContent = `Level ${lv}`
             messageEl.id = "message2"
             containerEl.appendChild(messageEl)
-        }
-       
-        setTimeout(()=> {
-            messageEl.remove()
-            displayBlocks()
-            ball.style.opacity = 1
-            if(lv == 2) {
-                adderX = Math.abs(adderY)
-                adderY = Math.abs(adderY)
-                paddleWidth = 100
-                paddleEl.style.width = paddleWidth + "px"
-                paddleEl.style.backgroundImage = "repeating-linear-gradient(90deg, white, white 32px, black 1px, black 34px)"
-                startGame()
-            }
-            else if(lv == 3) {
-                originalAdder = 4
-                adderX, adderY = originalAdder
-                startGame()
-            }
-            else {
-                createDialogueBox("Game Finished")
-            }
             
+           
+            setTimeout(()=> {
+                messageEl.remove()
+                ball.style.opacity = 1
+                displayBlocks()
+                if(lv == 2) {
+                    
+                    adderX = Math.abs(adderY)
+                    adderY = Math.abs(adderY)
+                    paddleWidth = 100
+                    paddleEl.style.width = paddleWidth + "px"
+                    paddleEl.style.backgroundImage = "repeating-linear-gradient(90deg, white, white 32px, black 1px, black 34px)"
+                    startGame()
+                }
+                else if(lv == 3) {
+                    
+                    originalAdder = 4
+                    adderX, adderY = originalAdder
+                    startGame()
+                }
+                
+            }, 900)
+                
+        }, 3000)
+    }
+
+    else {
+        createDialogueBox("Game Finished")
+    }
+    
             
-        }, 900)
-            
-    }, 3000)        
 }
 
 function setPosition(element, position) {
@@ -347,8 +368,6 @@ function createDialogueBox(sentence) {
     dialogueEl.classList.add("dialogue")
     containerEl.appendChild(dialogueEl)
     
-
-
 }
 
 

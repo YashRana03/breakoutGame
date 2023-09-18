@@ -69,16 +69,27 @@ body {
     
 }
 
+.green {
+    background: linear-gradient(#55680D, #71F53E, #116C31);
+}
 
+.pink {
+    background: linear-gradient(#7D3E96, #F26DCC, #7D3E96);
+}
+
+.blue {
+    background: linear-gradient(#000082, #0D75FF, #000082);
+}
+
+.red {
+    background: linear-gradient(#960F00, #FF3F26, #960F00);
+}
 
 .paddle {
     background-image: repeating-linear-gradient(90deg, white, white 50px, black 5px, black 51px);
     width: 150px;
     height: 30px;
-    position: absolute;
-    
-    
-    
+    position: absolute;    
 
 }
 
