@@ -24,7 +24,7 @@ body {
     margin-top: -250px;
     z-index: -1;
     padding-top: 25px;
-    background-color: black;
+    background-color: inherit;
       
 }
 
@@ -69,11 +69,15 @@ body {
     
 }
 
+
+
 .paddle {
     background-image: repeating-linear-gradient(90deg, white, white 50px, black 5px, black 51px);
     width: 150px;
     height: 30px;
     position: absolute;
+    
+    
     
 
 }
