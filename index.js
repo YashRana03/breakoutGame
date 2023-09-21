@@ -1,3 +1,4 @@
+// Html elements
 const startGameH3El = document.querySelector("#start-game h3")
 const startGameEl = document.getElementById("start-game")
 const gameEl = document.getElementById("game")
@@ -6,6 +7,11 @@ const scoreEl = document.getElementById("score")
 const containerEl = document.getElementById("container")
 let messageEl = null
 
+
+
+//Game variables
+let gamePortWidth = 900
+let gamePortHeight = 700
 
 const blockWidth = 150
 const blockHeight = 30
@@ -21,9 +27,10 @@ let buttonTimerId = null
 let lives = 3
 let score = 0
 let scale = 1.1
-let level  = 3
+let level  = 1
 
 
+// Adds onclick event listener to the initial page
 startGameEl.addEventListener("click", () => {
     startGameEl.style.animation = "slideleft 1s ease-in"
     setTimeout(() => {
@@ -33,6 +40,7 @@ startGameEl.addEventListener("click", () => {
     
 })
 
+// Creates recurring fading effect on the welcome message in the initial page
 setInterval(() => {
     startGameH3El.style.opacity = value
     if(value == 0.1) {
@@ -44,7 +52,7 @@ setInterval(() => {
     
 }, 1000)
 
-
+// Class used to create the various blocks to be hit
 class Block {
     constructor(valueX, valueY) {
         this.bottomLeft = [valueX, valueY]
@@ -53,7 +61,7 @@ class Block {
         this.topRight = [valueX+blockWidth, valueY+blockHeight]
     }
 }
-
+// Initial positions of various objects inside the game
 const paddlePosition = [375, 650]
 let ballPosition = [250, 200]
 let allBlocks = [
@@ -77,7 +85,7 @@ let allBlocks = [
 const allBlocksCopy = [...allBlocks]
 
 
-
+//Renders the blocks on the screen
 function displayBlocks() {
     let block = null
     let index = 0
@@ -98,12 +106,14 @@ function displayBlocks() {
 
 displayBlocks()
 
+// Paddle element to be displayed on the screen
 const paddleEl = document.createElement("div")
 paddleEl.classList.add("paddle")
 setPosition(paddleEl, paddlePosition)
 gameEl.appendChild(paddleEl)
 
 
+// Moves the paddle in the appropriate direction if the right key is pressed 
 function movePaddle(e) {
     switch(e.key) {
         case "ArrowLeft":
@@ -122,11 +132,19 @@ function movePaddle(e) {
 
 document.addEventListener("keydown", movePaddle)
 
+// Ball element to be displayed on the screen
 let ball = document.createElement("div")
 ball.classList.add("ball")
 setPosition(ball, ballPosition)
 gameEl.appendChild(ball)
 
+
+// Moves the ball on the screen by adding a small increment to the x and y position of the ball.
+// This is done by adding to the left and top css property of the ball which has a position of
+// absolute. 
+
+//Calls the checkGameEnd method to check if the current level is over and calls the checkCollision 
+//to see if the ball collided with something
 function moveBall() {
     
     checkGameEnd()
@@ -139,18 +157,26 @@ function moveBall() {
 
 }
 
+// Uses many if/else statements to check if the ball collided with a wall, block, or paddle or it went out 
 function checkCollision() {
     
-    if(ballPosition[0] >= 890 | ballPosition[0] <= 10) {
+
+    //Checks if the ball collided with the left or right wall and changes the x-increment appropriately
+    if(ballPosition[0] >= gamePortWidth - 10 | ballPosition[0] <= 10) {
         adderX = -adderX
     }
 
+    //Checks if the ball collided with the top wall and and changes the y-increment appropriately
     if(ballPosition[1] <= 5 ) {
         adderY = -adderY
     
     }
 
+    // Checks if the ball coollided with the paddle
     if( (ballPosition[1] > paddlePosition[1] - 26 && ballPosition[1] <= paddlePosition[1] - 10) && (ballPosition[0] >= paddlePosition[0] -10 && ballPosition[0] <= paddlePosition[0] + paddleWidth + 10)) {
+
+        // Through many if/else statement checks what position on the paddle the ball collided 
+        // with and accordingly changes the rebound of the ball
 
         if(ballPosition[0] < paddlePosition[0] + paddleWidth/5) {
             adderX = -originalAdder
@@ -179,13 +205,16 @@ function checkCollision() {
         
     }
 
-    if(ballPosition[1] >= 695 ) {
+    // Checks if the ball went past the paddle at the bottom
+    if(ballPosition[1] >= gamePortHeight - 5 ) {
         
-        
+        // Clears the interval that calls moveBall every 10 ms and then decrements the lives 
+        // of the player
         ball.style.opacity = 0
         clearInterval(gameTimerId)
         lives--
         if(lives == 0) {
+            // If the players has no lives left all blocks are removed from the screen
             let els = document.querySelectorAll("#game .block")
             for(el of els) {
                 el.remove()
@@ -193,10 +222,12 @@ function checkCollision() {
             
             setLives()
             scoreEl.style.opacity = 0
+            // And the createDialogueBox function is called in order to tell the player that the 
+            // game is over 
             createDialogueBox("Game Over") 
         }
         else {    
-
+            // If the players has still more lives the game is reset by retaking the ball at the start position and calling th startGame method after 1 second has passed
             setTimeout(()=> {
 
                 ballPosition = [250, 150]
@@ -212,11 +243,11 @@ function checkCollision() {
     }
 
 
-    
+    // Checks if the ball has hit any blocks if so it removes the block that has been hit
     let blocksEl = document.querySelectorAll("#game .block")
     for(let i = 0; i<allBlocks.length; i++) {
 
-        if((ballPosition[0] >= (allBlocks[i].bottomLeft[0] - 20)  && ballPosition[0] <= (allBlocks[i].bottomRight[0] + 20)) && (ballPosition[1] <= (allBlocks[i].bottomLeft[1] + 30) && ballPosition[1] >= (allBlocks[i].topLeft[1] -50) ) ) {
+        if((ballPosition[0] >= (allBlocks[i].bottomLeft[0] - 20)  && ballPosition[0] <= (allBlocks[i].bottomRight[0] + 20)) && (ballPosition[1] <= (allBlocks[i].bottomLeft[1] + 20) && ballPosition[1] >= (allBlocks[i].topLeft[1] -20) ) ) {
 
             blocksEl[i].remove()
             allBlocks.splice(i, 1) 
@@ -228,8 +259,12 @@ function checkCollision() {
     }
 }
 
+
+// Checks if the current level is over by checking if all the blocks on the screen have been 
+//  removed
 function checkGameEnd() {
     if(document.querySelectorAll("#game .block").length == 0) {
+        //If level is over it increments the level and passes it to the createMessage function
         clearInterval(gameTimerId)
         level++
         ballPosition = [250, 150]
@@ -243,7 +278,9 @@ function checkGameEnd() {
     }
 }
 
+// Creates a message for the user introducing a new level
 function createMessage(lv) {
+    // its level 2 or 3 a message element is added to the screen using a transition 
     if(lv == 2 | lv == 3) {
         messageEl =  document.createElement("h3")
         messageEl.textContent = `Level ${lv}`
@@ -260,9 +297,11 @@ function createMessage(lv) {
             
            
             setTimeout(()=> {
+                //After the message has been displayed  the blocks are re-rendered on the screen
                 messageEl.remove()
                 ball.style.opacity = 1
                 displayBlocks()
+                // If the level is 2 then the paddles is just made shorter
                 if(lv == 2) {
                     
                     adderX = Math.abs(adderY)
@@ -272,6 +311,7 @@ function createMessage(lv) {
                     paddleEl.style.backgroundImage = "repeating-linear-gradient(90deg, white, white 32px, black 1px, black 34px)"
                     startGame()
                 }
+                // Otherwise if the new level is 3 the speed of the ball movement is increa
                 else if(lv == 3) {
                     
                     originalAdder = 4
@@ -283,7 +323,8 @@ function createMessage(lv) {
                 
         }, 3000)
     }
-
+    // If the new level is anything other than 2 or 3 the user is presented with a pop up box 
+    // telling that the game is over
     else {
         createDialogueBox("Game Finished")
     }
@@ -291,12 +332,14 @@ function createMessage(lv) {
             
 }
 
+// Sets the left and top css propeties of any element passed in
 function setPosition(element, position) {
     element.style.left = position[0] + "px"
     element.style.top = position[1] + "px"
 }
 
 
+// Renders the lives of the player on screen
 function setLives() {
     livesEl.textContent = ""
     for(let i = 0; i<lives; i++) {
@@ -305,7 +348,7 @@ function setLives() {
 
 }
 
-
+// Creates a pop up dialogue for the user using the argument passed in
 function createDialogueBox(sentence) {
     
     const dialogueEl = document.createElement("div")
@@ -313,6 +356,7 @@ function createDialogueBox(sentence) {
     const h3El = document.createElement("h3")
     const buttonEl = document.createElement("button")
 
+    //Creating the various html element to be added to the dialogue box
     h1El.classList.add("game-over")
     h1El.textContent = sentence
     dialogueEl.appendChild(h1El)
@@ -323,6 +367,7 @@ function createDialogueBox(sentence) {
 
     buttonEl.classList.add("replay-btn")
     buttonEl.textContent = "Play again"
+    // Adding styling effects the button
     buttonEl.addEventListener("mouseover", () => {
         buttonEl.style.backgroundColor = "#85458A"
     })
@@ -330,6 +375,8 @@ function createDialogueBox(sentence) {
     buttonEl.addEventListener("mouseout", () => {
         buttonEl.style.backgroundColor = "#DE3456"
     })
+
+    // Adding event listener to the play again button to reset any game variables or game ojbects to their original form
 
     buttonEl.addEventListener("click", () => {
         allBlocks = [...allBlocksCopy]
@@ -355,6 +402,7 @@ function createDialogueBox(sentence) {
     
     dialogueEl.appendChild(buttonEl)
 
+    // Adding styling effect
     buttonTimerId = setInterval(() => {
         buttonEl.style.scale = scale
         if(scale == 1.1) {
@@ -371,6 +419,7 @@ function createDialogueBox(sentence) {
 }
 
 
+// calls the moveBall function every 10 ms
 function startGame() {
     // displayBlock()
     setLives()
