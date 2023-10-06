@@ -381,6 +381,7 @@ function createDialogueBox(sentence) {
     buttonEl.addEventListener("click", () => {
         allBlocks = [...allBlocksCopy]
         score = 0
+        scoreEl.textContent = `Score ${score}`
         lives = 3
         
         displayBlocks()
@@ -403,6 +404,7 @@ function createDialogueBox(sentence) {
     dialogueEl.appendChild(buttonEl)
 
     // Adding styling effect
+    
     buttonTimerId = setInterval(() => {
         buttonEl.style.scale = scale
         if(scale == 1.1) {
