@@ -5,7 +5,11 @@ const gameEl = document.getElementById("game")
 const livesEl = document.querySelector("#lives span")
 const scoreEl = document.getElementById("score")
 const containerEl = document.getElementById("container")
+const leftArrowEl = document.getElementById("left-arrow")
+const rightArrowEl = document.getElementById("right-arrow")
+
 let messageEl = null
+let triggered = false;
 
 
 
@@ -130,7 +134,29 @@ function movePaddle(e) {
     }
 }
 
+
 document.addEventListener("keydown", movePaddle)
+
+//  Moves the paddle in the appropriate direction if the when the right arrow is pressed 
+function arrowLeft() {
+
+    if(paddlePosition[0] > 15) {
+        paddlePosition[0] -= 40
+        paddleEl.style.left = paddlePosition[0] + "px"
+    }
+}
+function arrowRight() {
+
+    if(paddlePosition[0] + paddleWidth < 875) {
+        paddlePosition[0] += 40
+        paddleEl.style.left = paddlePosition[0] + "px"
+    }
+    
+}
+
+leftArrowEl.addEventListener("mousedown", arrowLeft)
+rightArrowEl.addEventListener('mousedown', arrowRight)
+
 
 // Ball element to be displayed on the screen
 let ball = document.createElement("div")
